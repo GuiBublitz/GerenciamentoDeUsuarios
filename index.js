@@ -10,5 +10,9 @@ let chkAdmin      = document.querySelector('#exampleInputAdmin');
 var fields =  document.querySelectorAll("#form-user-create [name]");
 
 fields.forEach((field,index) => {
-    
+    if(field.name == 'gender' && field.checked) {
+        console.log('Sim: '+ field.id);
+    } else {
+        console.log('Não');
+    }
 });
