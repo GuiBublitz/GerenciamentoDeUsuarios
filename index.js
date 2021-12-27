@@ -6,4 +6,9 @@ let inputEmail    = document.querySelector('#exampleInputEmail');
 let inputPassword = document.querySelector('#exampleInputPassword');
 let inputPhoto    = document.querySelector('#exampleInputFile');
 let chkAdmin      = document.querySelector('#exampleInputAdmin');
-console.log(gender);
+
+var fields =  document.querySelectorAll("#form-user-create [name]");
+
+fields.forEach((field,index) => {
+    
+});
