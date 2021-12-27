@@ -1,7 +1,9 @@
 let inputName     = document.querySelector('#exampleInputName');
-let maleRadio     = document.querySelector('#exampleInputGenderM');
-let femaleRadio   = document.querySelector('#exampleInputGenderF');
+let gender        = document.querySelectorAll('#form-user-create [name=gender]:checked');
 let inputBirth    = document.querySelector('#exampleInputBirth');
 let selectCountry = document.querySelector('#exampleInputCountry');
-let inputEmail    = document.querySelector('#exampleInputEmail1');
-let inputPassword = document.querySelector('#exampleInputPassword1');
+let inputEmail    = document.querySelector('#exampleInputEmail');
+let inputPassword = document.querySelector('#exampleInputPassword');
+let inputPhoto    = document.querySelector('#exampleInputFile');
+let chkAdmin      = document.querySelector('#exampleInputAdmin');
+console.log(gender);
