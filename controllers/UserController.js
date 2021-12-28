@@ -1,5 +1,4 @@
 class UserController {
-
     constructor(formId, tableId){
         this.formEl = document.getElementById(formId);
         this.tableEl = document.getElementById(tableId);
@@ -11,8 +10,25 @@ class UserController {
     onSubmit(){
         this.formEl.addEventListener('submit', (e)=>{
             e.preventDefault();
-            this.addUser(this.getValues());
+            let values = this.getValues();
+            this.getPhoto((content) => {
+                values.photo = content;
+                this.addUser(values);
+            });
         });   
+    }
+    getPhoto(callback){
+        let fileReader = new FileReader();
+        let elements = [...this.formEl.elements].filter( (item) => {
+            if (item.name === 'photo'){
+                return item;
+            }
+        });
+        let file = elements[0].files[0];
+        fileReader.onload = () => {
+            callback(fileReader.result);
+        };
+        fileReader.readAsDataURL(file);
     }
     getValues(){
         let user = {};
@@ -36,15 +52,15 @@ class UserController {
             user.admin
         );
     }
-    addUser(userDate){
+    addUser(userData){
         this.tableEl.innerHTML +=  
         `
         <tr>
-            <td><img src="dist/img/user1-128x128.jpg" alt="User Image" class="img-circle img-sm"></td>
-            <td>${userDate.name}</td>
-            <td>${userDate.email}</td>
-            <td>${userDate.admin}</td>
-            <td>${userDate.birth}</td>
+            <td><img src="${userData.photo}" alt="User Image" class="img-circle img-sm"></td>
+            <td>${userData.name}</td>
+            <td>${userData.email}</td>
+            <td>${userData.admin}</td>
+            <td>${userData.birth}</td>
             <td>
                 <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
                 <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
