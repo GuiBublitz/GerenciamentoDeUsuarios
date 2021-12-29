@@ -87,8 +87,8 @@ class UserController {
     }
     addUser(userData){
         let tr = document.createElement('tr');
+        tr.dataset.user = JSON.stringify(userData);
         tr.innerHTML =`
-        <tr>
             <td><img src="${userData.photo}" alt="User Image" class="img-circle img-sm"></td>
             <td>${userData.name}</td>
             <td>${userData.email}</td>
@@ -98,8 +98,24 @@ class UserController {
                 <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
                 <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
             </td>
-        </tr>
         `;
         this.tableEl.appendChild(tr);
+        this.updateCount();
+    }
+    updateCount(){
+        let numberUsers = 0;
+        let numberAdmin = 0;
+        
+        [...this.tableEl.children].forEach((item)=>{
+            let user = JSON.parse(item.dataset.user);
+            if(user._admin){
+                numberAdmin++;
+            }else{
+                numberUsers++;
+                
+            }
+        });
+        document.getElementById('number-users-admin').textContent = numberAdmin;
+        document.getElementById('number-users').textContent = numberUsers;
     }
 }
