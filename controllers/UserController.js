@@ -22,6 +22,7 @@ class UserController {
             let btn = this.formEl.querySelector('[type=submit]');
             btn.disabled = true;
             let values = this.getValues();
+            console.log(values);
             if(!values){
                 btn.disabled = false;
                 console.error('Digita os dadu antes né sua anta')
@@ -113,8 +114,19 @@ class UserController {
             for(let name in json){
                 let field = this.formElUpadate.querySelector("[name="+name.replace('_','')+"]");
                 if(field){
-                    if(field.type == 'file') continue;
-                    field.value = json[name];
+                    switch (field.type){
+                        case 'file':
+                            continue;
+                            break;
+                        case 'radio': 
+                            this.formElUpadate.querySelector('[name='+name.replace('_','') +'][value='+ json[name] +']').checked = true;
+                            break;
+                        case 'checkbox':
+                            field.checked = json[name];
+                            break;
+                        default:
+                            field.value = json[name];
+                    }
                 }
             };
             this.showPanelUpdate();
