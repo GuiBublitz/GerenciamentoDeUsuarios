@@ -2,10 +2,18 @@ class UserController {
     constructor(formId, tableId){
         this.formEl = document.getElementById(formId);
         this.tableEl = document.getElementById(tableId);
+        this.panelCreate = document.getElementById('box-user-create');
+        this.panelUpdate = document.getElementById('box-user-update');       
         this.initialize();
     }
     initialize(){
         this.onSubmit();
+        this.onEditEvents();
+    }
+    onEditEvents(){ 
+        document.querySelector("#box-user-update .btn-cancel").addEventListener('click',()=>{
+            this.showPanelCreate();
+        });
     }
     onSubmit(){
         this.formEl.addEventListener('submit', (e)=>{
@@ -89,18 +97,30 @@ class UserController {
         let tr = document.createElement('tr');
         tr.dataset.user = JSON.stringify(userData);
         tr.innerHTML =`
-            <td><img src="${userData.photo}" alt="User Image" class="img-circle img-sm"></td>
+            <td><img src="${userData.photo}" alt="User Image" style="object-fit: cover" class="img-circle img-sm"></td>
             <td>${userData.name}</td>
             <td>${userData.email}</td>
             <td>${(userData.admin) ? 'Sim' : 'Não'}</td>
             <td>${Utils.dateFormat(userData.register)}</td>
             <td>
-                <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
+                <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
                 <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
             </td>
         `;
+        tr.querySelector('.btn-edit').addEventListener('click',(e)=>{
+            console.log(JSON.parse(tr.dataset.user));
+            this.showPanelUpdate();
+        });
         this.tableEl.appendChild(tr);
         this.updateCount();
+    }
+    showPanelCreate(){
+        this.panelCreate.style.display = "block";   
+        this.panelUpdate.style.display = "none";   
+    }
+    showPanelUpdate(){
+        this.panelCreate.style.display = "none";   
+        this.panelUpdate.style.display = "block";     
     }
     updateCount(){
         let numberUsers = 0;
