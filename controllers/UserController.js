@@ -2,6 +2,7 @@ class UserController {
     constructor(formId, tableId){
         this.formEl = document.getElementById(formId);
         this.tableEl = document.getElementById(tableId);
+        this.formElUpadate = document.getElementById('form-user-update');
         this.panelCreate = document.getElementById('box-user-create');
         this.panelUpdate = document.getElementById('box-user-update');       
         this.initialize();
@@ -108,7 +109,14 @@ class UserController {
             </td>
         `;
         tr.querySelector('.btn-edit').addEventListener('click',(e)=>{
-            console.log(JSON.parse(tr.dataset.user));
+            let json = JSON.parse(tr.dataset.user);
+            for(let name in json){
+                let field = this.formElUpadate.querySelector("[name="+name.replace('_','')+"]");
+                if(field){
+                    if(field.type == 'file') continue;
+                    field.value = json[name];
+                }
+            };
             this.showPanelUpdate();
         });
         this.tableEl.appendChild(tr);
@@ -131,8 +139,7 @@ class UserController {
             if(user._admin){
                 numberAdmin++;
             }else{
-                numberUsers++;
-                
+                numberUsers++;   
             }
         });
         document.getElementById('number-users-admin').textContent = numberAdmin;
