@@ -1,8 +1,8 @@
 class UserController {
-    constructor(formId, tableId){
-        this.formEl = document.getElementById(formId);
+    constructor(formCreateId, formUpdateId, tableId){
+        this.formEl = document.getElementById(formCreateId);
+        this.formElUpadate = document.getElementById(formUpdateId);
         this.tableEl = document.getElementById(tableId);
-        this.formElUpadate = document.getElementById('form-user-update');
         this.panelCreate = document.getElementById('box-user-create');
         this.panelUpdate = document.getElementById('box-user-update');       
         this.initialize();
@@ -15,13 +15,20 @@ class UserController {
         document.querySelector("#box-user-update .btn-cancel").addEventListener('click',()=>{
             this.showPanelCreate();
         });
+        document.querySelector(this.formElUpadate).addEventListener('submit', (e)=>{
+            e.preventDefault();
+            let btn = this.formElUpadate.querySelector("[type=submit]");
+            btn.disable = true;
+            let values = this.getValues(this.formElUpadate);
+            
+        });
     }
     onSubmit(){
         this.formEl.addEventListener('submit', (e)=>{
             e.preventDefault();
             let btn = this.formEl.querySelector('[type=submit]');
             btn.disabled = true;
-            let values = this.getValues();
+            let values = this.getValues(this.formEl);
             console.log(values);
             if(!values){
                 btn.disabled = false;
@@ -63,10 +70,10 @@ class UserController {
             }
         })
     }
-    getValues(){
+    getValues(form){
         let user = {};
         let isValid = true;
-        [...this.formEl.elements].forEach((field,index) => {
+        [...form.elements].forEach((field,index) => {
             if(['name', 'email', 'password'].indexOf(field.name) > -1 && !field.value){
                 field.parentElement.classList.add('has-error');
                 isValid = false;
