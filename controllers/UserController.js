@@ -10,6 +10,7 @@ class UserController {
     initialize(){
         this.onSubmit();
         this.onEditEvents();
+        this.selectAll();
     }
     onEditEvents(){ 
         document.querySelector("#box-user-update .btn-cancel").addEventListener('click',()=>{
@@ -40,7 +41,7 @@ class UserController {
                         <td>${Utils.dateFormat(result._register)}</td>
                         <td>
                             <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
-                            <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
+                            <button type="button" class="btn btn-danger btn-delete btn-xs btn-flat">Excluir</button>
                         </td>
                     `;
                     this.addEventsTr(tr);
@@ -70,6 +71,7 @@ class UserController {
             this.getPhoto(this.formEl).then(
                 (content)=>{
                     values.photo = content;
+                    this.insert(values);
                     this.addUser(values);
                     btn.disabled = false;
                     this.formEl.reset();
@@ -133,6 +135,26 @@ class UserController {
             user.photo,
             user.admin
         );
+    }
+    getUserStorage(){
+        let users = [];
+        if (sessionStorage.getItem('users')){
+            users = JSON.parse(sessionStorage.getItem('users'));
+        }
+        return users;
+    }
+    selectAll(){
+        let users = this.getUserStorage();
+        users.forEach(dataUser => {
+            let user = new User();
+            user.loadFromJSON(dataUser); 
+            this.addUser(user);
+        });
+    }
+    insert(data){
+        let users = this.getUserStorage();
+        users.push(data);
+        sessionStorage.setItem("users", JSON.stringify(users));
     }
     addUser(userData){
         let tr = document.createElement('tr');
