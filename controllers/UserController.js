@@ -32,19 +32,9 @@ class UserController {
                     } else {
                         result._photo = content;
                     }
-                    tr.dataset.user = JSON.stringify(result);
-                    tr.innerHTML =`
-                        <td><img src="${result._photo}" alt="User Image" style="object-fit: cover" class="img-circle img-sm"></td>
-                        <td>${result._name}</td>
-                        <td>${result._email}</td>
-                        <td>${(result._admin) ? 'Sim' : 'Não'}</td>
-                        <td>${Utils.dateFormat(result._register)}</td>
-                        <td>
-                            <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
-                            <button type="button" class="btn btn-danger btn-delete btn-xs btn-flat">Excluir</button>
-                        </td>
-                    `;
-                    this.addEventsTr(tr);
+                    let user = new User();
+                    user.loadFromJSON(result);
+                    this.getTr(user, tr);
                     this.updateCount();
                     this.formElUpdate.reset();
                     this.showPanelCreate();
@@ -157,8 +147,13 @@ class UserController {
         localStorage.setItem("users", JSON.stringify(users));
     }
     addUser(userData){
-        let tr = document.createElement('tr');
-        tr.dataset.user = JSON.stringify(userData);
+        let tr = this.getTr(userData);
+        this.tableEl.appendChild(tr);
+        this.updateCount();
+    }
+    getTr(userData, tr = null){
+        if (tr === null)tr = document.createElement('tr');
+        tr.dataset.user = JSON.stringify(userData); 
         tr.innerHTML =`
             <td><img src="${userData.photo}" alt="User Image" style="object-fit: cover" class="img-circle img-sm"></td>
             <td>${userData.name}</td>
@@ -171,8 +166,7 @@ class UserController {
             </td>
         `;
         this.addEventsTr(tr);
-        this.tableEl.appendChild(tr);
-        this.updateCount();
+        return tr;
     }
     addEventsTr(tr){
         tr.querySelector('.btn-delete').addEventListener('click',(e)=>{
