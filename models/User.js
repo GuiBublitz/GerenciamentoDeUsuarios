@@ -79,8 +79,8 @@ class User {
         let users = User.getUserStorage();
         if(this.id > 0){
             users.map(u=>{
-                if(u._if === this.id){
-                    u = this;
+                if(u._id == this.id){
+                    Object.assign(u, this);
                 }
                 return u;
             });

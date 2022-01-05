@@ -150,7 +150,7 @@ class UserController {
     }
     getTr(userData, tr = null){
         if (tr === null)tr = document.createElement('tr');
-        tr.dataset.user = JSON.stringify(userData); 
+        tr.dataset.user = JSON.stringify(userData);     
         tr.innerHTML =`
             <td><img src="${userData.photo}" alt="User Image" style="object-fit: cover" class="img-circle img-sm"></td>
             <td>${userData.name}</td>
