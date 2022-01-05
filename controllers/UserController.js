@@ -13,6 +13,7 @@ class UserController {
         this.selectAll();
     }
     onEditEvents(){ 
+
         document.querySelector("#box-user-update .btn-cancel").addEventListener('click',()=>{
             this.showPanelCreate();
         });
@@ -34,6 +35,7 @@ class UserController {
                     }
                     let user = new User();
                     user.loadFromJSON(result);
+                    user.save();
                     this.getTr(user, tr);
                     this.updateCount();
                     this.formElUpdate.reset();
@@ -61,7 +63,7 @@ class UserController {
             this.getPhoto(this.formEl).then(
                 (content)=>{
                     values.photo = content;
-                    this.insert(values);
+                    values.save();
                     this.addUser(values);
                     btn.disabled = false;
                     this.formEl.reset();
@@ -140,11 +142,6 @@ class UserController {
             user.loadFromJSON(dataUser); 
             this.addUser(user);
         });
-    }
-    insert(data){
-        let users = this.getUserStorage();
-        users.push(data);
-        localStorage.setItem("users", JSON.stringify(users));
     }
     addUser(userData){
         let tr = this.getTr(userData);
